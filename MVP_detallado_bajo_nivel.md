@@ -7,12 +7,15 @@ Este documento desglosa las funcionalidades del MVP en tareas técnicas y consid
 ## 1. Integración de Fuentes de Noticias
 
 ### 1.1. Consumo de al menos 2 fuentes RSS
-- Seleccionar e investigar 2 fuentes RSS confiables (ej: Reuters, BBC).
+- Seleccionar e investigar 2 fuentes RSS confiables.
+  -- https://ensegundos.do/feed
+  -- https://www.diariolibre.com/rss/portada.xml
+
 - Implementar un servicio backend en Node.js para consumir y parsear los feeds usando `rss-parser`.
 - Programar tareas periódicas (cron jobs) para actualizar las noticias.
 
 ### 1.2. Normalización de datos
-- Definir un esquema de noticia (título, resumen, enlace, fecha, fuente, categoría).
+- Definir un esquema de noticia (foto, título, resumen, enlace, fecha, fuente, categoría, logo_fuente).
 - Transformar los datos de cada feed al esquema definido.
 - Almacenar las noticias normalizadas en MongoDB.
 
@@ -21,7 +24,7 @@ Este documento desglosa las funcionalidades del MVP en tareas técnicas y consid
 ## 2. Onboarding y Personalización Inicial
 
 ### 2.1. Pantalla de selección de categorías
-- Crear una pantalla de onboarding en Next.js con tarjetas o checkboxes de categorías.
+- Crear una pantalla de onboarding en Next.js con tarjetas o checkboxes similares a botones de categorías.
 - UI responsiva y atractiva (Tailwind CSS).
 
 ### 2.2. Almacenamiento de preferencias
@@ -58,7 +61,7 @@ Este documento desglosa las funcionalidades del MVP en tareas técnicas y consid
 
 ### 5.1. Página de detalle
 - Ruta dinámica en Next.js para mostrar el contenido completo de la noticia.
-- Mostrar título, resumen, contenido, fuente y fecha.
+- Mostrar foto, título, resumen, contenido, fuente, fecha y logo_fuente.
 
 ### 5.2. Resumen generado por IA
 - Backend: Endpoint que use OpenAI API para generar un resumen del contenido si el usuario lo solicita.
