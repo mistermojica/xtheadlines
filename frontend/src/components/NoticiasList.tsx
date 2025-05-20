@@ -10,6 +10,7 @@ export default function NoticiasList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [categoria, setCategoria] = useState<string>('todas');
+  const [categoriasDisponibles, setCategoriasDisponibles] = useState<string[]>(['Tecnología', 'Deportes', 'Política', 'Entretenimiento', 'Salud', 'Ciencia']);
 
   useEffect(() => {
     const fetchNoticias = async () => {
@@ -17,7 +18,7 @@ export default function NoticiasList() {
         setLoading(true);
         const url = categoria === 'todas' 
           ? 'http://localhost:4000/api/noticias'
-          : `http://localhost:4000/api/noticias/categoria?categoria=${categoria}`;
+          : `http://localhost:4000/api/noticias/categoria?categoria=${encodeURIComponent(categoria)}`;
         
         const response = await fetch(url);
         
@@ -27,6 +28,18 @@ export default function NoticiasList() {
         
         const data = await response.json();
         setNoticias(data);
+        
+        // Si es la carga inicial, obtener las categorías únicas de las noticias
+        if (categoria === 'todas' && data.length > 0) {
+          const categoriasUnicas = Array.from(
+            new Set(data.map(n => n.categoria).filter(Boolean).map(c => c.charAt(0).toUpperCase() + c.slice(1).toLowerCase()))
+          ).sort();
+          
+          if (categoriasUnicas.length > 0) {
+            setCategoriasDisponibles(categoriasUnicas);
+          }
+        }
+        
         setError(null);
       } catch (err) {
         console.error('Error:', err);
@@ -63,23 +76,25 @@ export default function NoticiasList() {
         <div className="flex flex-wrap gap-2 mb-6">
           <button
             onClick={() => setCategoria('todas')}
-            className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+            className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
               categoria === 'todas' 
                 ? 'bg-blue-700 text-white shadow-md' 
-                : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
+                : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
             }`}
+            title="Ver todas las noticias"
           >
             Todas
           </button>
-          {['Tecnología', 'Deportes', 'Política', 'Entretenimiento', 'Salud', 'Ciencia'].map((cat) => (
+          {categoriasDisponibles.map((cat) => (
             <button
               key={cat}
               onClick={() => setCategoria(cat.toLowerCase())}
-              className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
                 categoria === cat.toLowerCase()
                   ? 'bg-blue-700 text-white shadow-md'
-                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
+                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
               }`}
+              title={`Ver noticias de ${cat}`}
             >
               {cat}
             </button>

@@ -34,6 +34,30 @@ exports.getNoticiaById = async (req, res) => {
   }
 };
 
+// Obtener noticias por categoría
+exports.getNoticiasPorCategoria = async (req, res) => {
+  try {
+    const { categoria } = req.query;
+    
+    if (!categoria) {
+      return res.status(400).json({ mensaje: 'Se requiere el parámetro de categoría' });
+    }
+    
+    // Buscar noticias que coincidan con la categoría (insensible a mayúsculas/minúsculas)
+    const noticias = await Noticia.find({
+      categoria: { $regex: new RegExp(categoria, 'i') }
+    }).sort({ fecha: -1 });
+    
+    res.json(noticias);
+  } catch (error) {
+    console.error('Error al obtener noticias por categoría:', error);
+    res.status(500).json({ 
+      mensaje: 'Error al obtener noticias por categoría', 
+      error: error.message 
+    });
+  }
+};
+
 // Obtener noticias relacionadas
 exports.getNoticiasRelacionadas = async (req, res) => {
   try {

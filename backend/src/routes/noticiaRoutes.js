@@ -5,6 +5,9 @@ const noticiaController = require('../controllers/noticiaController');
 // Obtener noticias relacionadas (debe ir antes que /:id para evitar conflictos)
 router.get('/relacionadas', noticiaController.getNoticiasRelacionadas);
 
+// Obtener noticias por categoría
+router.get('/categoria', noticiaController.getNoticiasPorCategoria);
+
 // Obtener noticia por ID
 router.get('/:id', noticiaController.getNoticiaById);
 
